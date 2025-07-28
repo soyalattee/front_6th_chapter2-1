@@ -583,16 +583,6 @@ const doRenderBonusPoints = function () {
 };
 // --- doRenderBonusPoints 함수 끝 ---
 
-function onGetStockTotal() {
-  let stockSum = 0;
-  for (let i = 0; i < prodList.length; i++) {
-    const currentProduct = prodList[i];
-    stockSum += currentProduct.q;
-  }
-  return stockSum;
-}
-// --- onGetStockTotal 함수 끝 ---
-
 const handleStockInfoUpdate = function () {
   let infoMsg = '';
 

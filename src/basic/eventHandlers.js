@@ -7,12 +7,16 @@ export class EventHandlers {
   initializeHandlers() {
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCartClick = this.handleCartClick.bind(this);
+    this.handleManualToggle = this.handleManualToggle.bind(this);
+    this.handleManualOverlayClick = this.handleManualOverlayClick.bind(this);
   }
 
   setupEventListeners() {
-    const { addBtn, cartDisplay } = this.context;
+    const { addBtn, cartDisplay, manualToggle, manualOverlay } = this.context;
     addBtn.addEventListener('click', this.handleAddToCart);
     cartDisplay.addEventListener('click', this.handleCartClick);
+    manualToggle.addEventListener('click', this.handleManualToggle);
+    manualOverlay.addEventListener('click', this.handleManualOverlayClick);
   }
 
   handleAddToCart() {
@@ -119,5 +123,17 @@ export class EventHandlers {
       onUpdateCartStuff({ cartDisplay, prodList, totalAmt, itemCnt, stockInfo, sum });
       onUpdateSelectOptions({ productList: prodList, selectedOption: sel });
     }
+  }
+
+  handleManualToggle() {
+    const { manualOverlay, manualColumn } = this.context;
+    manualOverlay.classList.toggle('hidden');
+    manualColumn.classList.toggle('translate-x-full');
+  }
+
+  handleManualOverlayClick() {
+    const { manualOverlay, manualColumn } = this.context;
+    manualOverlay.classList.add('hidden');
+    manualColumn.classList.add('translate-x-full');
   }
 }

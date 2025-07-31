@@ -195,6 +195,10 @@ function ManualOverlay() {
   return manualOverlay;
 }
 
+function lightningDelayTimer(second) {
+  return Math.random() * second * 1000;
+}
+
 function main() {
   const totalAmt = 0;
   const itemCnt = 0;
@@ -217,33 +221,23 @@ function main() {
   selectorContainer.appendChild(stockInfo);
   selectorContainer.appendChild(addBtn);
 
-  const gridContainer = GridContainer();
   const cartDisplay = CartDisplay();
 
   leftColumn.appendChild(selectorContainer);
   leftColumn.appendChild(cartDisplay);
 
   const rightColumn = RightColumn();
+
   const sum = rightColumn.querySelector('#cart-total');
+
+  const gridContainer = GridContainer();
 
   gridContainer.appendChild(leftColumn);
   gridContainer.appendChild(rightColumn);
 
   const manualColumn = ManualColumn();
-
   const manualToggle = ManualToggleButton();
-
-  manualToggle.onclick = function () {
-    manualOverlay.classList.toggle('hidden');
-    manualColumn.classList.toggle('translate-x-full');
-  };
-
   const manualOverlay = ManualOverlay();
-
-  manualOverlay.onclick = function () {
-    manualOverlay.classList.add('hidden');
-    manualColumn.classList.add('translate-x-full');
-  };
 
   manualOverlay.appendChild(manualColumn);
 
@@ -259,8 +253,6 @@ function main() {
   onUpdateSelectOptions({ productList: prodList, selectedOption: sel });
   handleCalculateCartStuff();
 
-  const lightningDelay = Math.random() * 10000;
-
   setTimeout(() => {
     setInterval(function () {
       const luckyIdx = Math.floor(Math.random() * prodList.length);
@@ -273,7 +265,7 @@ function main() {
         onUpdatePricesInCart({ cartDisplay, productList: prodList, handleCalculateCartStuff });
       }
     }, 30000);
-  }, lightningDelay);
+  }, lightningDelayTimer(10));
 
   setTimeout(function () {
     setInterval(function () {
@@ -299,7 +291,7 @@ function main() {
         }
       }
     }, 60000);
-  }, Math.random() * 20000);
+  }, lightningDelayTimer(20));
 
   const eventHandlers = new EventHandlers({
     addBtn,
@@ -313,6 +305,9 @@ function main() {
     stockInfo,
     sum,
     setLastSel,
+    manualToggle,
+    manualOverlay,
+    manualColumn,
   });
   eventHandlers.setupEventListeners();
 }

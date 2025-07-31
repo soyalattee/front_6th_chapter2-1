@@ -50,6 +50,10 @@ export default defineConfig([
       'prefer-const': 'error', // 재할당 없는 변수는 const 사용 강제
       'no-shadow': 'error', // 변수명 중복(섀도잉) 방지 (버그 예방)
 
+      // === React 관련 규칙 ===
+      'react/react-in-jsx-scope': 'off', // React 17+ 에서는 React import가 필요없음
+      'react/jsx-uses-react': 'off', // React 17+ 에서는 React import가 필요없음
+
       // === 코드 스타일 통일 ===
       eqeqeq: ['error', 'always'], // === 연산자 사용 강제 (타입 안전성)
     },

@@ -1,4 +1,4 @@
-import { products } from '../data/products.json';
+import { products } from './data/products.json';
 import { EventHandlers } from './eventHandlers';
 import { initializeDiscountEvents } from './src/discountEvent';
 import { initializeLayout } from './src/renderUI';

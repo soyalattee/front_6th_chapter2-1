@@ -20,11 +20,11 @@ export class EventHandlers {
   }
 
   handleAddToCart() {
-    const { sel, prodList, cartDisplay, handleCalculateCartStuff, setLastSel } = this.context;
+    const { sel, productList, cartDisplay, handleCalculateCartStuff, setLastSel } = this.context;
     const selItem = sel.value;
     let hasItem = false;
-    for (let idx = 0; idx < prodList.length; idx++) {
-      if (prodList[idx].id === selItem) {
+    for (let idx = 0; idx < productList.length; idx++) {
+      if (productList[idx].id === selItem) {
         hasItem = true;
         break;
       }
@@ -33,9 +33,9 @@ export class EventHandlers {
       return;
     }
     let itemToAdd = null;
-    for (let j = 0; j < prodList.length; j++) {
-      if (prodList[j].id === selItem) {
-        itemToAdd = prodList[j];
+    for (let j = 0; j < productList.length; j++) {
+      if (productList[j].id === selItem) {
+        itemToAdd = productList[j];
         break;
       }
     }
@@ -84,16 +84,16 @@ export class EventHandlers {
   }
 
   handleCartClick(event) {
-    const { prodList, handleCalculateCartStuff, handleUpdateSelectOptions } = this.context;
+    const { productList, handleCalculateCartStuff, handleUpdateSelectOptions } = this.context;
 
     const tgt = event.target;
     if (tgt.classList.contains('quantity-change') || tgt.classList.contains('remove-item')) {
       const prodId = tgt.dataset.productId;
       const itemElem = document.getElementById(prodId);
       let prod = null;
-      for (let prdIdx = 0; prdIdx < prodList.length; prdIdx++) {
-        if (prodList[prdIdx].id === prodId) {
-          prod = prodList[prdIdx];
+      for (let prdIdx = 0; prdIdx < productList.length; prdIdx++) {
+        if (productList[prdIdx].id === prodId) {
+          prod = productList[prdIdx];
           break;
         }
       }

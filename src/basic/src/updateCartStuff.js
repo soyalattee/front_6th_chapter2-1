@@ -2,7 +2,7 @@ import { PRODUCT_1, PRODUCT_2, PRODUCT_3, PRODUCT_4, PRODUCT_5 } from '../consta
 import { onUpdateBonusPoints } from './updateBonusPoints';
 import { onUpdateStockInfo } from './updateStockInfo';
 
-export function onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum }) {
+export function onUpdateCartStuff({ cartDisplay, productList, stockInfo, sum }) {
   let totalAmt = 0;
   let itemCnt = 0;
   const cartItems = cartDisplay.children;
@@ -10,17 +10,17 @@ export function onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum }) {
 
   const itemDiscounts = [];
   const lowStockItems = [];
-  for (let idx = 0; idx < prodList.length; idx++) {
-    if (prodList[idx].q < 5 && prodList[idx].q > 0) {
-      lowStockItems.push(prodList[idx].name);
+  for (let idx = 0; idx < productList.length; idx++) {
+    if (productList[idx].q < 5 && productList[idx].q > 0) {
+      lowStockItems.push(productList[idx].name);
     }
   }
   for (let i = 0; i < cartItems.length; i++) {
     (function () {
       let curItem;
-      for (let j = 0; j < prodList.length; j++) {
-        if (prodList[j].id === cartItems[i].id) {
-          curItem = prodList[j];
+      for (let j = 0; j < productList.length; j++) {
+        if (productList[j].id === cartItems[i].id) {
+          curItem = productList[j];
           break;
         }
       }
@@ -94,9 +94,9 @@ export function onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum }) {
   if (subTot > 0) {
     for (let i = 0; i < cartItems.length; i++) {
       let curItem;
-      for (let j = 0; j < prodList.length; j++) {
-        if (prodList[j].id === cartItems[i].id) {
-          curItem = prodList[j];
+      for (let j = 0; j < productList.length; j++) {
+        if (productList[j].id === cartItems[i].id) {
+          curItem = productList[j];
           break;
         }
       }
@@ -189,8 +189,8 @@ export function onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum }) {
     }
   }
   let stockMsg = '';
-  for (let stockIdx = 0; stockIdx < prodList.length; stockIdx++) {
-    const item = prodList[stockIdx];
+  for (let stockIdx = 0; stockIdx < productList.length; stockIdx++) {
+    const item = productList[stockIdx];
     if (item.q < 5) {
       if (item.q > 0) {
         stockMsg = stockMsg + item.name + ': 재고 부족 (' + item.q + '개 남음)\n';
@@ -200,6 +200,6 @@ export function onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum }) {
     }
   }
   stockInfo.textContent = stockMsg;
-  onUpdateStockInfo({ productList: prodList, stockInfo });
-  onUpdateBonusPoints({ cartDisplay, totalAmt, prodList, itemCnt });
+  onUpdateStockInfo({ productList, stockInfo });
+  onUpdateBonusPoints({ cartDisplay, totalAmt, productList, itemCnt });
 }

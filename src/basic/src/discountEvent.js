@@ -5,13 +5,13 @@ function lightningDelayTimer(second) {
   return Math.random() * second * 1000;
 }
 
-export function initializeDiscountEvents({ prodList, handleUpdateForDiscountEvents, lastSel }) {
+export function initializeDiscountEvents({ productList, handleUpdateForDiscountEvents, lastSel }) {
   // 번개세일 이벤트
   function initializeLightningSale() {
     setTimeout(() => {
       setInterval(function () {
-        const luckyIdx = Math.floor(Math.random() * prodList.length);
-        const luckyItem = prodList[luckyIdx];
+        const luckyIdx = Math.floor(Math.random() * productList.length);
+        const luckyItem = productList[luckyIdx];
         if (luckyItem.q > 0 && !luckyItem.onSale) {
           luckyItem.val = Math.round((luckyItem.originalVal * 80) / 100);
           luckyItem.onSale = true;
@@ -28,11 +28,11 @@ export function initializeDiscountEvents({ prodList, handleUpdateForDiscountEven
       setInterval(function () {
         if (lastSel) {
           let suggest = null;
-          for (let k = 0; k < prodList.length; k++) {
-            if (prodList[k].id !== lastSel) {
-              if (prodList[k].q > 0) {
-                if (!prodList[k].suggestSale) {
-                  suggest = prodList[k];
+          for (let k = 0; k < productList.length; k++) {
+            if (productList[k].id !== lastSel) {
+              if (productList[k].q > 0) {
+                if (!productList[k].suggestSale) {
+                  suggest = productList[k];
                   break;
                 }
               }

@@ -8,7 +8,7 @@ import { onUpdateSelectOptions } from './src/updateSelectOptions';
 
 function main() {
   let lastSel = null;
-  const prodList = products.prodList;
+  const productList = products.prodList;
 
   function setLastSel(selItem) {
     lastSel = selItem;
@@ -18,15 +18,15 @@ function main() {
   const { sel, stockInfo, addBtn, cartDisplay, sum, manualOverlay, manualToggle, manualColumn } = initializeLayout();
 
   const handleCalculateCartStuff = () => {
-    onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum });
+    onUpdateCartStuff({ cartDisplay, productList, stockInfo, sum });
   };
 
   const handleUpdateSelectOptions = () => {
-    onUpdateSelectOptions({ productList: prodList, selectedOption: sel });
+    onUpdateSelectOptions({ productList, selectedOption: sel });
   };
 
   const handleUpdatePricesInCart = () => {
-    onUpdatePricesInCart({ cartDisplay, productList: prodList, handleCalculateCartStuff });
+    onUpdatePricesInCart({ cartDisplay, productList, handleCalculateCartStuff });
   };
 
   const handleUpdateForDiscountEvents = () => {
@@ -39,7 +39,7 @@ function main() {
 
   // 할인 이벤트 초기화
   initializeDiscountEvents({
-    prodList,
+    productList,
     handleUpdateForDiscountEvents,
     lastSel,
   });
@@ -51,7 +51,7 @@ function main() {
     manualToggle,
     manualOverlay,
     manualColumn,
-    prodList,
+    productList,
     sel,
     setLastSel,
     handleCalculateCartStuff,

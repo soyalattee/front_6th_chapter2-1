@@ -1,6 +1,6 @@
 import { PRODUCT_1, PRODUCT_2, PRODUCT_3 } from '../constants.js';
 
-export function onUpdateBonusPoints({ cartDisplay, totalAmt, prodList, itemCnt }) {
+export function onUpdateBonusPoints({ cartDisplay, totalAmt, productList, itemCnt }) {
   if (cartDisplay.children.length === 0) {
     document.getElementById('loyalty-points').style.display = 'none';
     return;
@@ -24,9 +24,9 @@ export function onUpdateBonusPoints({ cartDisplay, totalAmt, prodList, itemCnt }
   const nodes = cartDisplay.children;
   for (const node of nodes) {
     let product = null;
-    for (let pIdx = 0; pIdx < prodList.length; pIdx++) {
-      if (prodList[pIdx].id === node.id) {
-        product = prodList[pIdx];
+    for (let pIdx = 0; pIdx < productList.length; pIdx++) {
+      if (productList[pIdx].id === node.id) {
+        product = productList[pIdx];
         break;
       }
     }

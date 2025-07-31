@@ -7,8 +7,6 @@ import { onUpdatePricesInCart } from './src/updatePricesInCart';
 import { onUpdateSelectOptions } from './src/updateSelectOptions';
 
 function main() {
-  const totalAmt = 0;
-  const itemCnt = 0;
   let lastSel = null;
   const prodList = products.prodList;
 
@@ -20,7 +18,7 @@ function main() {
   const { sel, stockInfo, addBtn, cartDisplay, sum, manualOverlay, manualToggle, manualColumn } = initializeLayout();
 
   const handleCalculateCartStuff = () => {
-    onUpdateCartStuff({ cartDisplay, prodList, totalAmt, itemCnt, stockInfo, sum });
+    onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum });
   };
 
   const handleUpdateSelectOptions = () => {

@@ -2,9 +2,9 @@ import { PRODUCT_1, PRODUCT_2, PRODUCT_3, PRODUCT_4, PRODUCT_5 } from '../consta
 import { onUpdateBonusPoints } from './updateBonusPoints';
 import { onUpdateStockInfo } from './updateStockInfo';
 
-export function onUpdateCartStuff({ cartDisplay, prodList, totalAmt, itemCnt, stockInfo, sum }) {
-  totalAmt = 0;
-  itemCnt = 0;
+export function onUpdateCartStuff({ cartDisplay, prodList, stockInfo, sum }) {
+  let totalAmt = 0;
+  let itemCnt = 0;
   const cartItems = cartDisplay.children;
   let subTot = 0;
 

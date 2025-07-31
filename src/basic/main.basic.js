@@ -1,5 +1,5 @@
+import { products } from '../data/products.json';
 import { EventHandlers } from './eventHandlers';
-import products from './src/data/products.json';
 import { initializeDiscountEvents } from './src/discountEvent';
 import { initializeLayout } from './src/renderUI';
 import { onUpdateCartStuff } from './src/updateCartStuff';
@@ -8,7 +8,7 @@ import { onUpdateSelectOptions } from './src/updateSelectOptions';
 
 function main() {
   let lastSel = null;
-  const productList = products.prodList;
+  const productList = products;
 
   function setLastSel(selItem) {
     lastSel = selItem;

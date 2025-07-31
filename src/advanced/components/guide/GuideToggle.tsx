@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import ShoppingGuide from './ShoppingGuide';
+import Manual from '../manual/Manual';
 
 const GuideToggle = () => {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
@@ -24,7 +24,7 @@ const GuideToggle = () => {
           />
         </svg>
       </button>
-      {isToggleOpen && <ShoppingGuide />}
+      {isToggleOpen && <Manual isOpen={isToggleOpen} onClose={handleOpenToggle} />}
     </>
   );
 };

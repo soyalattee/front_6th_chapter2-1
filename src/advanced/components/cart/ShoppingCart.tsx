@@ -1,38 +1,78 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 
-import { products } from '../../../data/products.json';
-import { CartItem, Product } from '../../types';
+import { CartItem } from '../../types';
 import ProductPicker from './ProductPicker';
+
 interface ShoppingCartProps {
   cartItems: CartItem[];
   onAddToCart: (item: CartItem) => void;
+  onUpdateQuantity: (itemId: string, change: number) => void;
+  onRemoveFromCart: (itemId: string) => void;
 }
 
-const ShoppingCart = ({ cartItems, onAddToCart }: ShoppingCartProps) => {
+const ShoppingCart = ({ cartItems, onAddToCart, onUpdateQuantity, onRemoveFromCart }: ShoppingCartProps) => {
+  const cartRef = useRef<HTMLDivElement>(null);
+
+  const handleCartAction = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const button = target.closest('button');
+    if (!button) return;
+
+    const productId = button.dataset.productId;
+    if (!productId) return;
+
+    if (button.classList.contains('quantity-change')) {
+      const change = parseInt(button.dataset.change || '0');
+      onUpdateQuantity(productId, change);
+    } else if (button.classList.contains('remove-item')) {
+      onRemoveFromCart(productId);
+    }
+  };
+
   return (
     <div className="bg-white border border-gray-200 p-8 overflow-y-auto">
       <ProductPicker onAddToCart={onAddToCart} />
-      {cartItems.map((item) => (
-        <div id="cart-items" key={item.id}>
-          <div className="grid grid-cols-[80px_1fr_auto] gap-5 py-5 border-b border-gray-100 first:pt-0 last:border-b-0 last:pb-0">
+      <div ref={cartRef} id="cart-items" onClick={handleCartAction}>
+        {cartItems.map((item) => (
+          <div
+            key={item.id}
+            className="grid grid-cols-[80px_1fr_auto] gap-5 py-5 border-b border-gray-100 first:pt-0 last:border-b-0 last:pb-0"
+          >
             <div className="w-20 h-20 bg-gradient-black relative overflow-hidden">
               <div className="absolute top-1/2 left-1/2 w-[60%] h-[60%] bg-white/10 -translate-x-1/2 -translate-y-1/2 rotate-45" />
             </div>
             <div>
-              <h3 className="text-base font-normal mb-1 tracking-tight">{item.name}</h3>
+              <h3 className="text-base font-normal mb-1 tracking-tight">
+                {item.name}
+                {item.onSale && ' ⚡'}
+                {item.suggestSale && ' 💝'}
+              </h3>
               <p className="text-xs text-gray-500 mb-0.5 tracking-wide">PRODUCT</p>
-              <p className="text-xs text-black mb-3">₩{item.price}</p>
+              <p className="text-xs text-black mb-3">
+                {item.originalPrice !== item.price ? (
+                  <>
+                    <span className="line-through text-gray-400">₩{item.originalPrice.toLocaleString()}</span>{' '}
+                    <span
+                      className={`${item.onSale && item.suggestSale ? 'text-purple-600' : item.onSale ? 'text-red-500' : 'text-blue-500'}`}
+                    >
+                      ₩{item.price.toLocaleString()}
+                    </span>
+                  </>
+                ) : (
+                  `₩${item.price.toLocaleString()}`
+                )}
+              </p>
               <div className="flex items-center gap-4">
                 <button
-                  data-product-id="p1"
+                  data-product-id={item.id}
                   data-change="-1"
                   className="quantity-change w-6 h-6 border border-black bg-white text-sm flex items-center justify-center transition-all hover:bg-black hover:text-white"
                 >
-                  -
+                  −
                 </button>
-                <span>{item.quantity}</span>
+                <span className="text-sm font-normal min-w-[20px] text-center tabular-nums">{item.quantity}</span>
                 <button
-                  data-product-id="p1"
+                  data-product-id={item.id}
                   data-change="1"
                   className="quantity-change w-6 h-6 border border-black bg-white text-sm flex items-center justify-center transition-all hover:bg-black hover:text-white"
                 >
@@ -41,24 +81,32 @@ const ShoppingCart = ({ cartItems, onAddToCart }: ShoppingCartProps) => {
               </div>
             </div>
             <div className="text-right">
-              {item.onSale || item.suggestSale ? (
-                <div className="text-lg mb-2 tracking-tight tabular-nums">
-                  <span className="line-through text-gray-400">₩{item.originalPrice * item.quantity}</span>{' '}
-                  <span className="text-purple-600">₩{item.price * item.quantity}</span>
-                </div>
-              ) : (
-                <div className="text-lg mb-2 tracking-tight tabular-nums">₩{item.price * item.quantity}</div>
-              )}
-              <a
+              <div className="text-lg mb-2 tracking-tight tabular-nums">
+                {item.originalPrice !== item.price ? (
+                  <>
+                    <span className="line-through text-gray-400">
+                      ₩{(item.originalPrice * item.quantity).toLocaleString()}
+                    </span>{' '}
+                    <span
+                      className={`${item.onSale && item.suggestSale ? 'text-purple-600' : item.onSale ? 'text-red-500' : 'text-blue-500'}`}
+                    >
+                      ₩{(item.price * item.quantity).toLocaleString()}
+                    </span>
+                  </>
+                ) : (
+                  `₩${(item.price * item.quantity).toLocaleString()}`
+                )}
+              </div>
+              <button
+                data-product-id={item.id}
                 className="remove-item text-2xs text-gray-500 uppercase tracking-wider cursor-pointer transition-colors border-b border-transparent hover:text-black hover:border-black"
-                data-product-id="p1"
               >
                 Remove
-              </a>
+              </button>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { CartItem } from '@/types';
 
@@ -9,8 +9,19 @@ interface ProductPickerProps {
 }
 
 const ProductPicker = ({ onAddToCart }: ProductPickerProps) => {
-  const selectedProductRef = useRef<string | null>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
+  const selectedProductRef = useRef<string | null>(null);
+
+  // 컴포넌트 마운트 시 첫 번째 옵션 선택
+  useEffect(() => {
+    if (selectRef.current) {
+      const firstAvailableProduct = products.find((p) => p.quantity > 0);
+      if (firstAvailableProduct) {
+        selectRef.current.value = firstAvailableProduct.id;
+        selectedProductRef.current = firstAvailableProduct.id;
+      }
+    }
+  }, []);
 
   const handleSelectProduct = () => {
     if (selectRef.current) {
@@ -36,6 +47,8 @@ const ProductPicker = ({ onAddToCart }: ProductPickerProps) => {
     }
   };
 
+  const totalStock = products.reduce((total, p) => total + p.quantity, 0);
+
   return (
     <div className="mb-6 pb-6 border-b border-gray-200">
       <select
@@ -44,11 +57,26 @@ const ProductPicker = ({ onAddToCart }: ProductPickerProps) => {
         className="w-full p-3 border border-gray-300 rounded-lg text-base mb-3"
         onChange={handleSelectProduct}
         style={{
-          borderColor: products.reduce((total, p) => total + p.quantity, 0) < 50 ? 'orange' : '',
+          borderColor: totalStock < 50 ? 'orange' : '',
         }}
       >
         {products.map((product) => (
-          <option key={product.id} value={product.id} disabled={product.quantity === 0}>
+          <option
+            key={product.id}
+            value={product.id}
+            disabled={product.quantity === 0}
+            className={
+              product.onSale && product.suggestSale
+                ? 'text-purple-600 font-bold'
+                : product.onSale
+                  ? 'text-red-500 font-bold'
+                  : product.suggestSale
+                    ? 'text-blue-500 font-bold'
+                    : product.quantity === 0
+                      ? 'text-gray-400'
+                      : ''
+            }
+          >
             {product.name} -
             {product.onSale || product.suggestSale ? (
               <>

@@ -20,8 +20,7 @@ export class EventHandlers {
   }
 
   handleAddToCart() {
-    const { sel, prodList, cartDisplay, onUpdateCartStuff, totalAmt, itemCnt, stockInfo, sum, setLastSel } =
-      this.context;
+    const { sel, prodList, cartDisplay, handleCalculateCartStuff, setLastSel } = this.context;
     const selItem = sel.value;
     let hasItem = false;
     for (let idx = 0; idx < prodList.length; idx++) {
@@ -79,14 +78,13 @@ export class EventHandlers {
         itemToAdd.q--;
       }
 
-      onUpdateCartStuff({ cartDisplay, prodList, totalAmt, itemCnt, stockInfo, sum });
+      handleCalculateCartStuff();
       setLastSel(selItem);
     }
   }
 
   handleCartClick(event) {
-    const { prodList, onUpdateCartStuff, onUpdateSelectOptions, sel, cartDisplay, totalAmt, itemCnt, stockInfo, sum } =
-      this.context;
+    const { prodList, handleCalculateCartStuff, handleUpdateSelectOptions } = this.context;
 
     const tgt = event.target;
     if (tgt.classList.contains('quantity-change') || tgt.classList.contains('remove-item')) {
@@ -119,9 +117,8 @@ export class EventHandlers {
         prod.q += remQty;
         itemElem.remove();
       }
-
-      onUpdateCartStuff({ cartDisplay, prodList, totalAmt, itemCnt, stockInfo, sum });
-      onUpdateSelectOptions({ productList: prodList, selectedOption: sel });
+      handleCalculateCartStuff();
+      handleUpdateSelectOptions();
     }
   }
 

@@ -1,14 +1,13 @@
 import { useEffect, useRef } from 'react';
 
-import { CartItem } from '@/types';
-
-import { products } from '../../../data/products.json';
+import { CartItem, Product } from '@/types';
 
 interface ProductPickerProps {
+  products: Product[];
   onAddToCart: (item: CartItem) => void;
 }
 
-const ProductPicker = ({ onAddToCart }: ProductPickerProps) => {
+const ProductPicker = ({ onAddToCart, products }: ProductPickerProps) => {
   const selectRef = useRef<HTMLSelectElement>(null);
   const selectedProductRef = useRef<string | null>(null);
 
@@ -77,13 +76,21 @@ const ProductPicker = ({ onAddToCart }: ProductPickerProps) => {
                       : ''
             }
           >
+            {/* 아이콘을 앞쪽에 배치하고 할인율 문구 추가 */}
+            {product.onSale && '⚡'}
+            {product.suggestSale && '💝'}
             {product.name} -
             {product.onSale || product.suggestSale ? (
               <>
                 <span className="line-through">₩{product.originalPrice.toLocaleString()}</span>
-                {' → '}₩{product.price.toLocaleString()}
-                {product.onSale && ' ⚡'}
-                {product.suggestSale && ' 💝'}
+                {' → '}₩{product.price.toLocaleString()}{' '}
+                {product.onSale && product.suggestSale
+                  ? '(25% SUPER SALE!)'
+                  : product.onSale
+                    ? '(20% SALE!)'
+                    : product.suggestSale
+                      ? '(5% 추천할인!)'
+                      : null}
               </>
             ) : (
               `₩${product.price.toLocaleString()}`

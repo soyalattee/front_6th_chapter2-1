@@ -1,16 +1,17 @@
 import { useRef } from 'react';
 
-import { CartItem } from '../../types';
+import { CartItem, Product } from '../../types'; // Product import 추가
 import ProductPicker from './ProductPicker';
 
 interface ShoppingCartProps {
+  products: Product[];
   cartItems: CartItem[];
   onAddToCart: (item: CartItem) => void;
   onUpdateQuantity: (itemId: string, change: number) => void;
   onRemoveFromCart: (itemId: string) => void;
 }
 
-const ShoppingCart = ({ cartItems, onAddToCart, onUpdateQuantity, onRemoveFromCart }: ShoppingCartProps) => {
+const ShoppingCart = ({ products, cartItems, onAddToCart, onUpdateQuantity, onRemoveFromCart }: ShoppingCartProps) => {
   const cartRef = useRef<HTMLDivElement>(null);
 
   const handleCartAction = (e: React.MouseEvent) => {
@@ -23,15 +24,41 @@ const ShoppingCart = ({ cartItems, onAddToCart, onUpdateQuantity, onRemoveFromCa
 
     if (button.classList.contains('quantity-change')) {
       const change = parseInt(button.dataset.change || '0');
-      onUpdateQuantity(productId, change);
-    } else if (button.classList.contains('remove-item')) {
+      const product = products.find((p) => p.id === productId);
+      const cartItem = cartItems.find((item) => item.id === productId);
+
+      if (!product || !cartItem) return;
+
+      // 수량 감소 시
+      if (change < 0) {
+        // 1개 이하로는 못 내려감 (1개일 때는 Remove 버튼 사용하도록)
+        if (cartItem.quantity <= 1) {
+          return;
+        }
+        onUpdateQuantity(productId, change);
+        return;
+      }
+
+      // 수량 증가 시
+      if (change > 0) {
+        // 재고가 없는 경우
+        if (product.quantity <= 0) {
+          alert('재고가 부족합니다.');
+          return;
+        }
+        onUpdateQuantity(productId, change);
+        return;
+      }
+    }
+
+    if (button.classList.contains('remove-item')) {
       onRemoveFromCart(productId);
     }
   };
 
   return (
     <div className="bg-white border border-gray-200 p-8 overflow-y-auto">
-      <ProductPicker onAddToCart={onAddToCart} />
+      <ProductPicker products={products} onAddToCart={onAddToCart} />
       <div ref={cartRef} id="cart-items" onClick={handleCartAction}>
         {cartItems.map((item) => (
           <div
@@ -53,7 +80,13 @@ const ShoppingCart = ({ cartItems, onAddToCart, onUpdateQuantity, onRemoveFromCa
                   <>
                     <span className="line-through text-gray-400">₩{item.originalPrice.toLocaleString()}</span>{' '}
                     <span
-                      className={`${item.onSale && item.suggestSale ? 'text-purple-600' : item.onSale ? 'text-red-500' : 'text-blue-500'}`}
+                      className={`${
+                        item.onSale && item.suggestSale
+                          ? 'text-purple-600'
+                          : item.onSale
+                            ? 'text-red-500'
+                            : 'text-blue-500'
+                      }`}
                     >
                       ₩{item.price.toLocaleString()}
                     </span>
@@ -88,7 +121,13 @@ const ShoppingCart = ({ cartItems, onAddToCart, onUpdateQuantity, onRemoveFromCa
                       ₩{(item.originalPrice * item.quantity).toLocaleString()}
                     </span>{' '}
                     <span
-                      className={`${item.onSale && item.suggestSale ? 'text-purple-600' : item.onSale ? 'text-red-500' : 'text-blue-500'}`}
+                      className={`${
+                        item.onSale && item.suggestSale
+                          ? 'text-purple-600'
+                          : item.onSale
+                            ? 'text-red-500'
+                            : 'text-blue-500'
+                      }`}
                     >
                       ₩{(item.price * item.quantity).toLocaleString()}
                     </span>
